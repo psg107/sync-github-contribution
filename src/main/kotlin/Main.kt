@@ -17,7 +17,7 @@ const val CHUNK_SIZE = 10
 const val START_DATE = "1970-01-01"
 val config = loadConfig()
 val DOMAIN = config.getProperty("domain") ?: throw IllegalArgumentException("domain을 입력해주세요.")
-val SESSION = config.getProperty("session") ?: throw IllegalArgumentException("session을 입력해주세요.")
+val USER_SESSION = config.getProperty("user_session") ?: throw IllegalArgumentException("user_session을 입력해주세요.")
 
 suspend fun main() {
     val userName = print("userName: ").let {
@@ -45,7 +45,7 @@ suspend fun main() {
 suspend fun getContributions(userName: String, year: Int): List<Contribution> {
     val url = "$DOMAIN/${userName}?tab=overview&from=${year}-12-01&to=${year}-12-31"
     return HttpClient(CIO).get(url) {
-        cookie("user_session", SESSION)
+        cookie("user_session", USER_SESSION)
     }.let {
         parseContributions(it.bodyAsText())
     }
